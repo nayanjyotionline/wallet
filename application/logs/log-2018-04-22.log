@@ -1,0 +1,14 @@
+ERROR - 2018-04-22 20:18:05 --> Severity: Warning --> mysqli::real_connect(): (28000/1045): Access denied for user 'u11763'@'localhost' (using password: NO) /var/www/u11763/data/www/coin.ideah.ru/system/database/drivers/mysqli/mysqli_driver.php 201
+ERROR - 2018-04-22 20:18:05 --> Unable to connect to the database
+ERROR - 2018-04-22 20:18:15 --> Severity: Warning --> mysqli::real_connect(): (28000/1045): Access denied for user 'u11763'@'localhost' (using password: NO) /var/www/u11763/data/www/coin.ideah.ru/system/database/drivers/mysqli/mysqli_driver.php 201
+ERROR - 2018-04-22 20:18:15 --> Unable to connect to the database
+ERROR - 2018-04-22 19:21:56 --> Severity: Warning --> Missing argument 1 for Transactions_model::get_pending_dash(), called in /var/www/u11763/data/www/coin.ideah.ru/application/controllers/admin/Dashboard.php on line 47 and defined /var/www/u11763/data/www/coin.ideah.ru/application/models/Transactions_model.php 2134
+ERROR - 2018-04-22 19:21:56 --> Severity: Warning --> Missing argument 1 for Disputes_model::get_pending_dash(), called in /var/www/u11763/data/www/coin.ideah.ru/application/controllers/admin/Dashboard.php on line 49 and defined /var/www/u11763/data/www/coin.ideah.ru/application/models/Disputes_model.php 449
+ERROR - 2018-04-22 19:21:56 --> Severity: Warning --> Missing argument 1 for Support_model::get_pending_dash(), called in /var/www/u11763/data/www/coin.ideah.ru/application/controllers/admin/Dashboard.php on line 51 and defined /var/www/u11763/data/www/coin.ideah.ru/application/models/Support_model.php 282
+ERROR - 2018-04-22 19:21:56 --> Severity: Warning --> Missing argument 1 for Verification_model::get_pending_dash(), called in /var/www/u11763/data/www/coin.ideah.ru/application/controllers/admin/Dashboard.php on line 53 and defined /var/www/u11763/data/www/coin.ideah.ru/application/models/Verification_model.php 178
+ERROR - 2018-04-22 19:21:56 --> Severity: Warning --> Missing argument 1 for Merchants_model::get_pending_dash(), called in /var/www/u11763/data/www/coin.ideah.ru/application/controllers/admin/Dashboard.php on line 55 and defined /var/www/u11763/data/www/coin.ideah.ru/application/models/Merchants_model.php 1158
+ERROR - 2018-04-22 19:24:59 --> Could not find the language line "ausers tickets close_success"
+ERROR - 2018-04-22 19:29:29 --> Could not find the language line "ausers tickets close_success"
+ERROR - 2018-04-22 19:29:33 --> Could not find the language line "ausers tickets close_success"
+ERROR - 2018-04-22 19:29:41 --> Could not find the language line "ausers tickets close_success"
+ERROR - 2018-04-22 19:29:47 --> Could not find the language line "ausers tickets close_success"

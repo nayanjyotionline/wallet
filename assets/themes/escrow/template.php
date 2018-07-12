@@ -22,11 +22,10 @@
     <!-- Custom styles for this template -->
     <link href="<?php echo base_url();?>assets/themes/escrow/css/escrow.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
-		<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
-	
+
 	<nav class="navbar navbar-expand-md navbar-dark">
 		<div class="container">
       <a class="navbar-brand" href="#">
@@ -53,7 +52,7 @@
           <li class="nav-item <?php echo (uri_string() == 'contact') ? 'active' : ''; ?>">
             <a class="nav-link" href="<?php echo base_url('/contact'); ?>"><?php echo lang('core button contact'); ?></a>
           </li>
-         
+
         </ul>
         <div class="form-inline my-2 my-lg-0">
 					<?php if ($this->session->userdata('logged_in')) : ?>
@@ -71,7 +70,7 @@
           <a href="<?php echo base_url('user/register'); ?>" class="btn btn-success my-2 my-sm-0"><?php echo lang('core button create'); ?></a>
 					<?php endif; ?>
         </div>
-				
+
       </div>
 		</div>
     </nav>
@@ -81,7 +80,7 @@
     <?php // Main content ?>
         <?php echo $content; ?>
 	</main>
-	
+
 	<?php // System messages ?>
         <?php if ($this->session->flashdata('message')) : ?>
 				<div class="notify-popup">
@@ -131,7 +130,7 @@
 
     <?php // Footer ?>
     <footer>
-			
+
 			<div class="footer">
 				<div class="container">
 					<div class="row">
@@ -157,21 +156,21 @@
 									</a>
 									<?php endforeach; ?>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-        
+
     </footer>
-	
+
 	 <!-- Placed at the end of the document so the pages load faster -->
-	
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-	
+
 	<?php // Javascript files ?>
     <?php if (isset($js_files) && is_array($js_files)) : ?>
         <?php foreach ($js_files as $js) : ?>

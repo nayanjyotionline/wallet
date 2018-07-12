@@ -16,7 +16,7 @@ class User extends Public_Controller {
     function __construct()
     {
         parent::__construct();
-			
+
 		$this->load->library('email');
 		$this->load->library('protect_username');
 		$this->load->library('googleauthenticator.php');
@@ -41,46 +41,46 @@ class User extends Public_Controller {
      * Default
      */
     function index() {}
-	
-	function authentication() 
+
+	function authentication()
 	{
-			
+
 		$user = $this->users_model->get_user($this->user['id']);
-			
+
 		if ($user == NULL) {
-				
+
 			//redirect to landing page
         	redirect(base_url());
-				
+
 		} else {
-				
+
 			if ($user['login_status'] == 1) {
-					
+
 				if ($user['method_login'] == 1) {
-					
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 						array(
 							"login_status"   => "2",
 						)
 					);
-						
+
 					// redirect to landing page
 	          		redirect(base_url('account/transactions'));
-					
+
 				} elseif ($user['method_login'] == 4) {
-					
+
 					$email_template = $this->template_model->get_email_template(31);
-					
+
 					$token = rand(10000000, 99999999);
-					
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 						array(
 							"login_token"   => $token,
 						)
 					);
-									
+
 					if($email_template['status'] == "1") {
 
 						// variables to replace
@@ -105,27 +105,27 @@ class User extends Public_Controller {
 						$this -> email -> message($str_1);
 
 						$this->email->send();
-							
+
 						$this->session->set_flashdata('message', lang('users security email_success'));
-						
+
 					}
-					
+
 				} else if ($user['method_login'] == 3) {
-					
+
 					$sms_template = $this->template_model->get_sms_template(1);
-						
+
 					$token = rand(10000000, 99999999);
-						
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 						array(
 							"login_token"   => $token,
 						)
 					);
-					
-					
+
+
 					if ($sms_template['status'] == "1") {
-						
+
 						$rawstring = $sms_template['message'];
 
 						// what will we replace
@@ -135,11 +135,11 @@ class User extends Public_Controller {
 
 						//replace
 						$str_1 = str_replace($placeholders, $vals_1, $rawstring);
-							
+
 						$result = $this->sms->send_sms($user['phone'], $str_1);
-						
+
 						if ($result == TRUE) {
-						
+
 							$this->session->set_flashdata('message', lang('users security sms_success'));
 
 						} else {
@@ -147,24 +147,24 @@ class User extends Public_Controller {
 							$this->session->set_flashdata('error', lang('users security sms_fail'));
 
 						}
-						
+
 					}
-					
+
 				}
-					
+
 			} else {
-					
+
 				redirect(base_url('account/transactions'));
-					
+
 			}
-			
+
 		}
-			
+
 		// setup page header data
       	$this->set_title(lang('users security authentication'));
 
       	$data = $this->includes;
-			
+
 		/// set content data
 	    $content_data = array(
 	        'user'   => $user
@@ -173,100 +173,100 @@ class User extends Public_Controller {
 		// load views
 		$data['content'] = $this->load->view('user/authentication', $content_data, TRUE);
 		$this->load->view($this->template, $data);
-			
+
 	}
-	
-	function start_authentication() 
+
+	function start_authentication()
 	{
-			
+
 		$user = $this->users_model->get_user($this->user['id']);
-			
+
 		$authenticator = new Googleauthenticator();
-			
+
 		$this->form_validation->set_rules('code', lang('users security code'), 'required|trim|numeric');
-			
+
 		$code = $this->input->post("code", TRUE);
-			
-		if ($this->form_validation->run() == TRUE)
+
+		if ($this->form_validation->run() == FALSE)
     	{
-				
+
 			if ($user['method_login'] == 2) {
-				
+
 				// 2fa
 				$secret = $user['2fa_login'];
-					
+
 				$tolerance = 0;
-					
+
 				$checkResult = $authenticator->verifyCode($secret, $code, $tolerance);
-					
-				if ($checkResult) 
+
+				if ($checkResult)
 				{
-						
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 					array(
 						"login_status"   => "2",
 						)
 					);
-						
+
 					redirect(base_url('account/transactions'));
-						
+
 				} else {
-						
+
 					$this->session->set_flashdata('error', lang('users security failed'));
 					redirect(base_url('user/authentication'));
-						
+
 				}
-				
+
 			} elseif ($user['method_login'] == 3) {
-				
+
 				if ($code == $user['login_token']) {
-						
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 					array(
 						"login_status"   => "2",
 						)
 					);
-						
+
 					redirect(base_url('account/transactions'));
-						
+
 				} else {
-						
+
 					$this->session->set_flashdata('error', lang('users security failed'));
 					redirect(base_url('user/authentication'));
-						
+
 				}
-				
+
 			} elseif ($user['method_login'] == 4) {
-				
+
 				if ($code == $user['login_token']) {
-						
+
 					// update user
 					$this->users_model->update_setting_user($user['id'],
 					array(
 						"login_status"   => "2",
 						)
 					);
-						
+
 					redirect(base_url('account/transactions'));
-						
+
 				} else {
-						
+
 					$this->session->set_flashdata('error', lang('users security failed'));
 					redirect(base_url('user/authentication'));
-						
+
 				}
-				
+
 			}
-				
+
 		} else {
-				
+
 			$this->session->set_flashdata('error', lang('users security failed'));
 			redirect(base_url('user/authentication'));
-				
+
 		}
-			
+
 	}
 
 
@@ -306,7 +306,7 @@ class User extends Public_Controller {
             else
             {
                 $logged_in_user = $this->session->userdata('logged_in');
-								
+
                 if ($logged_in_user['is_admin'])
                 {
                     // redirect to admin dashboard
@@ -314,21 +314,21 @@ class User extends Public_Controller {
                 }
                 else
                 {
-									
+
                     // redirect to landing page
                     redirect(base_url('user/authentication'));
                 }
-								
+
 								/*
 								if ($logged_in_user['method_login'] == 1) {
-									
+
 									// update user
 									$this->users_model->update_setting_user($logged_in_user['id'],
 									array(
 										"login_status"   => "2",
 										)
 									);
-									
+
 									if ($logged_in_user['is_admin'])
 									{
 											// redirect to admin dashboard
@@ -340,19 +340,19 @@ class User extends Public_Controller {
 											// redirect to landing page
 											redirect(base_url('account/transactions'));
 									}
-									
+
 								} elseif ($logged_in_user['method_login'] == 2) {
-									
+
 									redirect('user/authentication');
-									
+
 								} elseif ($logged_in_user['method_login'] == 3) {
-									
+
 									redirect('user/authentication');
-									
+
 								} elseif ($logged_in_user['method_login'] == 4) {
-									
+
 									redirect('user/authentication');
-									
+
 								}
 								*/
             }
@@ -383,7 +383,7 @@ class User extends Public_Controller {
 				"login_status"   => "1",
 			)
 		);
-			
+
         $this->session->unset_userdata('logged_in');
         $this->session->sess_destroy();
         redirect('login');
@@ -404,7 +404,7 @@ class User extends Public_Controller {
         $this->form_validation->set_rules('language', lang('users input language'), 'required|trim');
         $this->form_validation->set_rules('password', lang('users input password'), 'required|trim|min_length[5]');
         $this->form_validation->set_rules('password_repeat', lang('users input password_repeat'), 'required|trim|matches[password]');
-			
+
 		//your site secret key
 		$secret = $this->settings->google_secret;
 		//get verify response data
@@ -414,11 +414,11 @@ class User extends Public_Controller {
         if ($this->form_validation->run() == TRUE)
         {
 			if ($responseData->success) {
-						
+
 				$check_protect = $this->protect_username->check_username($this->input->post('username', TRUE));
-						
+
 				if ($check_protect == TRUE) {
-							
+
 					// save the changes
 					$validation_code = $this->users_model->create_profile($this->security->xss_clean($this->input->post()), $_SERVER["REMOTE_ADDR"]);
 
@@ -466,21 +466,21 @@ class User extends Public_Controller {
 							$this->session->set_flashdata('error', lang('users error register_failed'));
 							redirect($_SERVER['REQUEST_URI'], 'refresh');
 						}
-							
+
 					} else {
-							
+
 						$this->session->set_flashdata('error', lang('users balanve info4'));
 						redirect($_SERVER['REQUEST_URI'], 'refresh');
-							
+
 					}
-						
+
 				} else {
-						
+
 					$this->session->set_flashdata('error', lang('users error register_failed'));
             		redirect($_SERVER['REQUEST_URI'], 'refresh');
-						
+
 				}
-            
+
             // redirect home and display message
             redirect('login');
         }
@@ -536,7 +536,7 @@ class User extends Public_Controller {
         // validators
         $this->form_validation->set_error_delimiters($this->config->item('error_delimeter_left'), $this->config->item('error_delimeter_right'));
         $this->form_validation->set_rules('email', lang('users input email'), 'required|trim|max_length[256]|valid_email|callback__check_email_exists');
-		
+
 		//your site secret key
 		$secret = $this->settings->google_secret;
 		//get verify response data
@@ -545,9 +545,9 @@ class User extends Public_Controller {
 
         if ($this->form_validation->run() == TRUE)
         {
-					
+
 			if ($responseData->success) {
-						
+
 			// save the changes
             $results = $this->users_model->reset_password($this->input->post());
 
@@ -555,12 +555,12 @@ class User extends Public_Controller {
             {
 
                $email_template = $this->template_model->get_email_template(3);
-							
+
 				if($email_template['status'] == "1") {
-							
+
                 // build email
                 $reset_url  = base_url('login');
-							
+
 				// variables to replace
 				$site_name = $this->settings->site_name;
 
@@ -582,7 +582,7 @@ class User extends Public_Controller {
 				$this -> email -> message($str_1);
 
 				$this->email->send();
-							
+
 			}
 
             $this->session->set_flashdata('message', sprintf(lang('users msg password_reset_success'), $results['first_name']));
@@ -591,11 +591,11 @@ class User extends Public_Controller {
             {
                 $this->session->set_flashdata('error', lang('users error password_reset_failed'));
             }
-						
+
 			} else {
-						
+
 				$this->session->set_flashdata('error', lang('users error password_reset_failed'));
-						
+
 			}
             // redirect home and display message
             redirect(base_url());
@@ -645,23 +645,23 @@ class User extends Public_Controller {
 				//get verify response data
 				$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
 				$responseData = json_decode($verifyResponse);
-							
+
 					if($responseData->success) {
-									
+
                 		$this->session->set_userdata('logged_in', $login);
-									
+
 					} else {
-									
+
 						$this->form_validation->set_message(lang('users error invalid_login'));
 
             		return FALSE;
-									
+
 					}
 
 					$user = $this->users_model->get_user_check($this->input->post('username', TRUE));
 
 					$email_template = $this->template_model->get_email_template(2);
-									
+
 					if($email_template['status'] == "1") {
 
 						// variables to replace
@@ -687,13 +687,13 @@ class User extends Public_Controller {
 						$this -> email -> message($str_1);
 
 						$this->email->send();
-										
+
 					}
-							
+
 					$sms_template = $this->template_model->get_sms_template(2);
-							
+
 					if($sms_template['status'] == "1") {
-										
+
 						$rawstring = $sms_template['message'];
 
 						// what will we replace
@@ -705,11 +705,11 @@ class User extends Public_Controller {
 						$str_1 = str_replace($placeholders, $vals_1, $rawstring);
 
 						$result = $this->sms->send_sms($user['phone'], $str_1);
-										
+
 					}
-							
+
 					// Register event
-							
+
 					$event = $this->events_model->register_event(array(
 						"type" 				=> "1",
 						"user"  			=> $user['username'],
@@ -718,7 +718,7 @@ class User extends Public_Controller {
 						"code"			  	=> uniqid("evn_"),
 						)
 					);
-									
+
 					return TRUE;
             }
 

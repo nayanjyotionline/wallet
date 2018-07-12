@@ -64,10 +64,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'          => '',
-    'hostname'     => 'den1.mssql6.gear.host',
-    'username'     => 'wallets', // As of MySQL v5.7, you can't use 'root' without sudo - you must use a different username and password - https://askubuntu.com/questions/763336/cannot-enter-phpmyadmin-as-root-mysql-5-7
-    'password'     => 'Ad383vcq?_94',
-    'database'     => 'wallets',
+    'hostname'     => '35.230.164.145',
+    'username'     => 'wallet', // As of MySQL v5.7, you can't use 'root' without sudo - you must use a different username and password - https://askubuntu.com/questions/763336/cannot-enter-phpmyadmin-as-root-mysql-5-7
+    'password'     => '',
+    'database'     => 'wallet',
     'dbdriver'     => 'mysqli',
     'dbprefix'     => '',
     'pconnect'     => FALSE,
